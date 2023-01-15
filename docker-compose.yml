@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  php:
+    build:
+      dockerfile: .docker/php/Dockerfile
+      context: ./
+    command:
+      - vendor/bin/wait-for-it.sh
+      - amqp:5672
+      - --strict
+      - --
+      - vendor/bin/wait-for-it.sh
+      - db:3306
+      - --strict
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    restart: unless-stopped
+    volumes:
+      - ./.docker/php/php.ini:/usr/local/etc/php/conf.d/40-custom.ini:ro
+      - ./.docker/data/composer:/home/appuser/.composer
+      - ./project:/var/www
+    environment:
+      TZ: Europe/Moscow
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_LOGIN: ${DB_LOGIN}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG:-}
+      YII_DEBUG: 'true'
+      YII_ENV: ${YII_ENV:-dev}
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      XDEBUG_CONFIG: "client_host=host.docker.internal"
+      XDEBUG_TRIGGER: "yes"
+      URL_PREFIX: /app
+    depends_on:
+      - db
+      - amqp
+    extra_hosts:
+      - host.docker.internal:${HOST_IP:-host.docker.internal}
+    profiles:
+      - full
+      - console-tools
+    dns: 1.1.1.1
+
+  db:
+    image: mysql:5.7
+    restart: unless-stopped
+    volumes:
+      - .docker/data/db:/var/lib/mysql
+    ports:
+      - ${DB_PORT:-3306}:3306
+    environment:
+      TZ: Europe/Moscow
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_LOGIN}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    profiles:
+      - full
+
+  amqp:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${AMQP_USER}
+      RABBITMQ_DEFAULT_PASS: ${AMQP_PASSWORD}
+    expose:
+      - 5672
+    ports:
+      - ${AMQP_PORT:-15672}:15672
+    profiles:
+      - full

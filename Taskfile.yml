@@ -1,0 +1,120 @@
+version: 2.6
+
+silent: false
+
+tasks:
+  up:
+    env:
+      USER_ID:
+        sh: id -u
+      GROUP_ID:
+        sh: id -g
+    cmds:
+      - docker-compose up -d --remove-orphans
+    status:
+      - docker-compose exec -T php echo ''
+
+  down:
+    cmds:
+      - docker-compose down
+
+  php:restart:
+    cmds:
+      - docker-compose restart php
+
+  php:server:
+    deps: [up]
+    cmds:
+      - docker-compose exec -d php php -S localhost:8080 -t api/web/
+
+  php:psalm:
+    deps: [ up ]
+    ignore_error: true
+    cmds:
+      - docker-compose exec php php vendor/bin/psalm
+
+  php:unit:
+    deps: [ up ]
+    cmds:
+      - docker-compose exec php php vendor/bin/phpunit
+
+  php:infection:
+    deps: [ up ]
+    cmds:
+      - docker-compose exec -e XDEBUG_MODE=coverage php php vendor/bin/roave-infection-static-analysis-plugin --only-covered
+
+  php:behat:
+    deps: [php:server, yii:migrate:fresh]
+    cmds:
+      - docker-compose exec php php vendor/bin/behat
+
+  php:test:
+    cmds:
+      - task: php:psalm
+        ignore_error: true
+      - task: php:unit
+      - task: php:infection
+
+  php:exec:
+    deps: [up]
+    cmds:
+      - docker-compose exec php {{.c}}
+
+  php:run:
+    cmds:
+      - docker-compose run --rm php {{.CLI_ARGS}}
+
+  yii:
+    cmds:
+      - task: php:run
+        vars:
+          CLI_ARGS: php ./yii {{if .CLI_ARGS}}{{.CLI_ARGS}}{{end}}
+
+  yii:migrate:
+    cmds:
+      - task: yii
+        vars:
+          c: migrate --interactive=0
+
+  yii:migrate:fresh:
+    cmds:
+      - task: yii
+        vars:
+          c: migrate:fresh --interactive=0
+
+  composer:i:
+    cmds:
+      - task: php:run
+        vars:
+          CLI_ARGS: composer install
+
+  composer:u:
+    cmds:
+      - task: php:run
+        vars:
+          CLI_ARGS: composer update {{if .CLI_ARGS}}{{.CLI_ARGS}}{{end}}
+
+  composer:r:
+    cmds:
+      - task: php:run
+        vars:
+          CLI_ARGS: composer require {{.CLI_ARGS}}
+
+  composer:rm:
+    cmds:
+      - task: php:run
+        vars:
+          CLI_ARGS: composer remove {{.CLI_ARGS}}
+
+  composer:yii-cfg:
+    cmds:
+      - task: php:run
+        vars:
+          CLI_ARGS: composer yii-config-rebuild
+
+  prod:u:
+    cmds:
+      - git pull
+      - docker-compose -f docker-compose.prod.yml pull php
+      - docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+      - docker-compose -f docker-compose.prod.yml run --rm php ./yii migrate/up

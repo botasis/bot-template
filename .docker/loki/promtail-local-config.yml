@@ -1,0 +1,58 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: application
+    static_configs:
+      - labels:
+          job: application
+          __path__: /var/log/app/*.log
+    pipeline_stages:
+      - json:
+          expressions:
+            datetime: datetime
+            channel: channel
+            level_name: level_name
+            context: context
+            message: message
+      - timestamp:
+          source: datetime
+          format: RFC3339Nano
+      - json:
+          expressions:
+            endpoint: endpoint
+            request_id: request_id
+            extra: extra
+          source: context
+
+      - labels:
+          channel:
+          level_name:
+
+  - job_name: roadrunner
+    static_configs:
+      - labels:
+          job: roadrunner
+          __path__: /var/log/rr/*.log
+    pipeline_stages:
+      - json:
+          expressions:
+            message: msg
+            level: level
+            datetime: ts
+      - timestamp:
+          source: datetime
+          format: RFC3339Nano
+      - template:
+          source: logger
+          template: '{{ TrimSpace .Value }}'
+      - labels:
+          level:
+          logger:
