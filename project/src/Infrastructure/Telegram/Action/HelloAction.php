@@ -18,13 +18,13 @@ final class HelloAction implements RequestHandlerInterface
     public function handle(TelegramRequest $request): ResponseInterface
     {
         $text = <<<'TXT'
-            Yii3-powered bot is here\!
-            Read docs to get idea where to get next: \<link will be here\>
+            Yii3-powered bot is here!
+            Read docs to get idea where to get next: <link will be here>
             TXT;
 
         $message = new TelegramMessage(
             $text,
-            MessageFormat::MARKDOWN,
+            MessageFormat::TEXT,
             $request->chatId,
         );
 

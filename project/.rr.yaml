@@ -18,18 +18,9 @@ service:
   queue_consumer_default:
     command: php yii queue/listen
     process_num: 1
-    exec_timeout: '0'
+    exec_timeout: '0s'
     remain_after_exit: true
     restart_sec: 1
-
-  github_repos:
-    command: php yii inform/github/load-repos
-    remain_after_exit: true
-
-  github_updates:
-    command: php yii inform/github/load-events
-    remain_after_exit: true
-    restart_sec: 30
 
   telegram_updates:
       command: php yii viktorprogger/telegram/updates
