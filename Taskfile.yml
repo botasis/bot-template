@@ -11,8 +11,15 @@ tasks:
         sh: id -g
     cmds:
       - docker compose --profile full up -d --remove-orphans
-    status:
-      - docker compose exec -T php echo ''
+
+  up-main:
+    env:
+      USER_ID:
+        sh: id -u
+      GROUP_ID:
+        sh: id -g
+    cmds:
+      - docker compose --profile main up -d --remove-orphans
 
   down:
     cmds:

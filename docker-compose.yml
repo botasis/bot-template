@@ -46,7 +46,10 @@ services:
     profiles:
       - full
       - console-tools
-    dns: 1.1.1.1
+      - main
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
 
   db:
     image: mysql:5.7
@@ -59,8 +62,11 @@ services:
       MYSQL_USER: ${DB_LOGIN}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT:-3306}:3306
     profiles:
       - full
+      - main
 
   amqp:
     image: rabbitmq:3-alpine
@@ -70,5 +76,39 @@ services:
       RABBITMQ_DEFAULT_PASS: ${AMQP_PASSWORD}
     expose:
       - 5672
+    profiles:
+      - full
+      - main
+
+  loki:
+    image: grafana/loki:2.7.1
+    command: -config.file=/etc/loki/local-config.yaml
+    profiles:
+      - full
+
+  promtail:
+    image: grafana/promtail:2.4.1
+    volumes:
+      - ./project/runtime/logs:/var/log/app
+      - ./project/runtime/logs-rr:/var/log/rr
+      - .docker/data/promtail-data:/var/lib/promtail/positions
+      - .docker/loki/promtail-local-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    links:
+      - loki
+    profiles:
+      - full
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    user: 1000:1000
+    volumes:
+      - .docker/data/grafana:/var/lib/grafana
+      - .docker/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+    ports:
+      - ${GRAFANA_PORT:-3000}:3000
     profiles:
       - full

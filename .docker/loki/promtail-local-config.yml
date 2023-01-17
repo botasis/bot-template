@@ -31,10 +31,9 @@ scrape_configs:
             request_id: request_id
             extra: extra
           source: context
-
       - labels:
-          channel:
-          level_name:
+          channel: channel
+          level: level_name
 
   - job_name: roadrunner
     static_configs:
