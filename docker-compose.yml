@@ -67,7 +67,7 @@ services:
     profiles:
       - full
       - main
-      - db
+      - warmup
 
   amqp:
     image: rabbitmq:3-alpine
@@ -80,6 +80,7 @@ services:
     profiles:
       - full
       - main
+      - warmup
 
   loki:
     image: grafana/loki:2.7.1
