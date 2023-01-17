@@ -67,6 +67,7 @@ services:
     profiles:
       - full
       - main
+      - db
 
   amqp:
     image: rabbitmq:3-alpine
