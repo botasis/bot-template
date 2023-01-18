@@ -24,6 +24,8 @@ This repo uses docker-compose profiles mechanism to get only needed services wor
 - `main` - get your application up and running. It starts `php`, `db` and `amqp` services.
 - `full` - get working Loki and Grafana with Promtail for convenient logs reading. This app produces tons of logs, so these services will be useful to get in what's happening inside your app.
 
+To get everything down regardless of a set of running services, run `docker compose down --remove-orphans`
+
 ## Components
 ### DBAL
 This app uses [yiisoft/yii-cycle](https://github.com/yiisoft/yii-cycle) as DBAL. 
