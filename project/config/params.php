@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Bot\Infrastructure\Telegram\WebHook\TelegramHookHandler;
 use Cycle\Database\Config\MySQL\DsnConnectionConfig;
 use Cycle\Database\Config\MySQLDriverConfig;
 use Psr\Log\LogLevel;
@@ -94,7 +95,9 @@ return [
         'conveyor' => CompositeSchemaConveyor::class,
     ],
     'yiisoft/yii-queue' => [
-        'handlers' => [],
+        'handlers' => [
+            TelegramHookHandler::NAME => TelegramHookHandler::class,
+        ],
         'channel-definitions' => [],
     ],
 ];
