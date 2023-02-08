@@ -1,10 +1,10 @@
 <?php
 
-namespace Viktorprogger\YiisoftInform\Infrastructure;
+namespace Bot\Infrastructure;
 
 use Ramsey\Uuid\UuidInterface;
 use RuntimeException;
-use Viktorprogger\YiisoftInform\Infrastructure\Entity\UuidFactory;
+use Bot\Infrastructure\Entity\UuidFactory;
 
 final class RequestId
 {

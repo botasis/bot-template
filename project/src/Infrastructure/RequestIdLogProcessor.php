@@ -1,6 +1,6 @@
 <?php
 
-namespace Viktorprogger\YiisoftInform\Infrastructure;
+namespace Bot\Infrastructure;
 
 use Monolog\LogRecord;
 

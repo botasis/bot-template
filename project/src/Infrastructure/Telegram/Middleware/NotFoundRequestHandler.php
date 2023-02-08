@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Viktorprogger\YiisoftInform\Infrastructure\Telegram\Middleware;
+namespace Bot\Infrastructure\Telegram\Middleware;
 
 use Viktorprogger\TelegramBot\Domain\Client\MessageFormat;
 use Viktorprogger\TelegramBot\Domain\Client\Response;

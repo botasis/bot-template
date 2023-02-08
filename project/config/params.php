@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Cycle\Database\Config\MySQL\DsnConnectionConfig;
 use Cycle\Database\Config\MySQLDriverConfig;
 use Psr\Log\LogLevel;
-use Viktorprogger\YiisoftInform\Infrastructure\Telegram\Action\HelloAction;
+use Bot\Infrastructure\Telegram\Action\HelloAction;
 use Yiisoft\Yii\Cycle\Schema\Conveyor\CompositeSchemaConveyor;
 
 return [

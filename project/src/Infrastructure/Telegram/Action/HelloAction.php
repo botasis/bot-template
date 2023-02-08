@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Viktorprogger\YiisoftInform\Infrastructure\Telegram\Action;
+namespace Bot\Infrastructure\Telegram\Action;
 
 use Viktorprogger\TelegramBot\Domain\Client\InlineKeyboardButton;
 use Viktorprogger\TelegramBot\Domain\Client\MessageFormat;

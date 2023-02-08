@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Viktorprogger\YiisoftInform\Infrastructure\Entity;
+namespace Bot\Infrastructure\Entity;
 
 use InvalidArgumentException;
 use Ramsey\Uuid\Exception\UnableToBuildUuidException;
