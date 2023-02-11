@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+use Bot\Infrastructure\Entity\Request\Cycle\RequestRepository;
+use Bot\Infrastructure\Entity\User\Cycle\UserRepository;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
@@ -23,6 +25,8 @@ use Sentry\State\HubInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Viktorprogger\TelegramBot\Domain\Client\TelegramClientInterface;
+use Viktorprogger\TelegramBot\Domain\Entity\Request\RequestRepositoryInterface;
+use Viktorprogger\TelegramBot\Domain\Entity\User\UserRepositoryInterface;
 use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Application;
 use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Middleware\MiddlewareDispatcher;
 use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Router;
@@ -56,8 +60,12 @@ return [
         ],
     ],
     TelegramClientLog::class => ['__construct()' => ['logger' => Reference::to('loggerTelegram')]],
+    RequestRepositoryInterface::class => RequestRepository::class,
+    UserRepositoryInterface::class => UserRepository::class,
+
     HttpClientInterface::class => static fn() => HttpClient::create(),
     UuidFactoryInterface::class => UuidFactory::class,
+
     LoggerInterface::class => Logger::class,
     Logger::class => static function(Aliases $alias, RequestIdLogProcessor $requestIdLogProcessor) {
         return (new Logger('application'))
@@ -84,10 +92,12 @@ return [
     'loggerTelegram' => static fn(Logger $logger) => $logger->withName('telegram'),
     'loggerGithub' => static fn(Logger $logger) => $logger->withName('github'),
     'loggerCycle' => static fn(Logger $logger) => $logger->withName('cycle'),
+
     CacheInterface::class => ApcuCache::class,
     Router::class => [
         '__construct()' => ['routes' => $params['telegram routes']]
     ],
+
     QueueInterface::class => Queue::class,
     AdapterInterface::class => Adapter::class,
     MessageSerializerInterface::class => MessageSerializer::class,
