@@ -12,7 +12,9 @@ class RequestIdLogProcessor
 
     public function __invoke(LogRecord $record): LogRecord
     {
-        $context = $record['context'] + ['request_id' => $this->requestId->getValue()];
+        /** @var array $context */
+        $context = $record['context'] ?? [];
+        $context += ['request_id' => $this->requestId->getValue()];
 
         return $record->with(...['context' => $context]);
     }

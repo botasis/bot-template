@@ -21,6 +21,7 @@
         "php": "^8.2",
         "ext-apcu": "*",
         "ext-pdo": "*",
+        "cycle/orm": "^2.2",
         "httpsoft/http-message": "^1.0",
         "monolog/monolog": "^3.2",
         "php-http/socket-client": "^2.1",
@@ -59,6 +60,7 @@
     },
     "require-dev": {
         "infection/infection": "^0.26",
+        "maglnet/composer-require-checker": "^4.5",
         "phpunit/phpunit": "^9.5",
         "psalm/attributes": "^0.1.0",
         "roave/infection-static-analysis-plugin": "^1.28",

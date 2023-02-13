@@ -8,6 +8,9 @@ use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use DateTimeImmutable;
 
+/**
+ * @psalm-suppress MissingConstructor
+ */
 #[Entity(table: 'viktorprogger_telegram_request')]
 class RequestEntity
 {

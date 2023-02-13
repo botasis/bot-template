@@ -20,8 +20,12 @@ class RequestRepository implements RequestRepositoryInterface
 
     public function __construct(private readonly ORM $orm, private readonly TelegramRequestFactory $requestFactory)
     {
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        /** @psalm-suppress PropertyTypeCoercion */
+        /**
+         * TODO Update yii-cycle to v2 and fix this line
+         * @see https://github.com/viktorprogger/bot-template/issues/2
+         * @psalm-suppress PropertyTypeCoercion
+         * @noinspection PhpFieldAssignmentTypeMismatchInspection
+         */
         $this->repository = $this->orm->getRepository(RequestEntity::class);
     }
 
@@ -34,6 +38,12 @@ class RequestRepository implements RequestRepositoryInterface
         $entity->id = $request->id->value;
         $entity->contents = json_encode($request->raw, JSON_THROW_ON_ERROR);
         $entity->created_at = new DateTimeImmutable(timezone: new DateTimeZone('UTC'));
+
+        /**
+         * TODO Update yii-cycle to v2 and fix this line
+         * @see https://github.com/viktorprogger/bot-template/issues/2
+         * @psalm-suppress DeprecatedClass
+         */
         (new Transaction($this->orm))->persist($entity)->run();
     }
 
@@ -48,7 +58,10 @@ class RequestRepository implements RequestRepositoryInterface
             return null;
         }
 
-        return $this->requestFactory->create(json_decode($entity->contents, true, flags: JSON_THROW_ON_ERROR));
+        /** @var array $update */
+        $update = json_decode($entity->contents, true, flags: JSON_THROW_ON_ERROR);
+
+        return $this->requestFactory->create($update);
     }
 
     /**

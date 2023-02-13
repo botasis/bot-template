@@ -17,7 +17,12 @@ class UserRepository implements UserRepositoryInterface
 
     public function __construct(private readonly ORM $orm)
     {
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /**
+         * TODO Update yii-cycle to v2 and fix this line
+         * @see https://github.com/viktorprogger/bot-template/issues/2
+         * @psalm-suppress PropertyTypeCoercion
+         * @noinspection PhpFieldAssignmentTypeMismatchInspection
+         */
         $this->cycleRepository = $orm->getRepository(UserEntity::class);
     }
 
@@ -29,6 +34,11 @@ class UserRepository implements UserRepositoryInterface
     public function create(User $user): void
     {
         $entity = new UserEntity($user->id->value);
+        /**
+         * TODO Update yii-cycle to v2 and fix this line
+         * @see https://github.com/viktorprogger/bot-template/issues/2
+         * @psalm-suppress DeprecatedClass
+         */
         (new Transaction($this->orm))->persist($entity)->run();
     }
 }

@@ -20,7 +20,9 @@ final class TelegramHookHandler
 
     public function __invoke(MessageInterface $message): void
     {
-        $telegramRequest = $this->requestFactory->create($message->getData());
+        /** @var array $update */
+        $update = $message->getData();
+        $telegramRequest = $this->requestFactory->create($update);
         $this->application->handle($telegramRequest);
     }
 }
