@@ -5,6 +5,9 @@ declare(strict_types=1);
 
 use Bot\Infrastructure\Entity\Request\Cycle\RequestRepository;
 use Bot\Infrastructure\Entity\User\Cycle\UserRepository;
+use Http\Client\Socket\Client;
+use HttpSoft\Message\RequestFactory;
+use HttpSoft\Message\StreamFactory;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
@@ -15,6 +18,9 @@ use Monolog\Processor\MemoryUsageProcessor;
 use Monolog\Processor\PsrLogMessageProcessor;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPLazyConnection;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Ramsey\Uuid\UuidFactory;
@@ -31,6 +37,7 @@ use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Application;
 use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Middleware\MiddlewareDispatcher;
 use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Router;
 use Viktorprogger\TelegramBot\Infrastructure\Client\TelegramClientLog;
+use Viktorprogger\TelegramBot\Infrastructure\Client\TelegramClientPsr;
 use Viktorprogger\TelegramBot\Infrastructure\Client\TelegramClientSymfony;
 use Viktorprogger\TelegramBot\Infrastructure\UpdateRuntime\Middleware\RequestPersistingMiddleware;
 use Viktorprogger\TelegramBot\Infrastructure\UpdateRuntime\Middleware\RouterMiddleware;
@@ -52,8 +59,8 @@ use Yiisoft\Yii\Queue\QueueInterface;
 /** @var array $params */
 
 return [
-    TelegramClientInterface::class => TelegramClientSymfony::class,
-    TelegramClientSymfony::class => [
+    TelegramClientInterface::class => TelegramClientPsr::class,
+    TelegramClientPsr::class => [
         '__construct()' => [
             'token' => getenv('BOT_TOKEN'),
             'logger' => Reference::to('loggerTelegram'),
@@ -63,7 +70,10 @@ return [
     RequestRepositoryInterface::class => RequestRepository::class,
     UserRepositoryInterface::class => UserRepository::class,
 
-    HttpClientInterface::class => static fn() => HttpClient::create(),
+    ClientInterface::class => Client::class,
+    StreamFactoryInterface::class => StreamFactory::class,
+    RequestFactoryInterface::class => RequestFactory::class,
+
     UuidFactoryInterface::class => UuidFactory::class,
 
     LoggerInterface::class => Logger::class,

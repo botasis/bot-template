@@ -70,8 +70,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Viktorprogger\\YiisoftInform\\": "src",
-            "Viktorprogger\\YiisoftInform\\Migration\\": "migrations"
+            "Bot\\": "src",
+            "Bot\\Migration\\": "migrations"
         }
     },
     "autoload-dev": {
@@ -118,7 +118,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "yiisoft/config": true,
-            "infection/extension-installer": true
+            "infection/extension-installer": true,
+            "php-http/discovery": true
         }
     }
 }

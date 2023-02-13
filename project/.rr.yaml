@@ -25,7 +25,7 @@ service:
   telegram_updates:
       command: php yii viktorprogger/telegram/updates
       remain_after_exit: true
-      restart_sec: 30
+      restart_sec: 10
 
 http:
   address: :80

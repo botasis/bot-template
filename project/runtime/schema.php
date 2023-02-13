@@ -7,7 +7,7 @@ use Cycle\ORM\SchemaInterface as Schema;
 
 return [
     'requestEntity' => [
-        Schema::ENTITY => Viktorprogger\TelegramBot\Infrastructure\Entity\Request\Cycle\RequestEntity::class,
+        Schema::ENTITY => Bot\Infrastructure\Entity\Request\Cycle\RequestEntity::class,
         Schema::MAPPER => Cycle\ORM\Mapper\Mapper::class,
         Schema::SOURCE => Cycle\ORM\Select\Source::class,
         Schema::REPOSITORY => Cycle\ORM\Select\Repository::class,
@@ -30,7 +30,7 @@ return [
         Schema::TYPECAST_HANDLER => null,
     ],
     'userEntity' => [
-        Schema::ENTITY => Viktorprogger\TelegramBot\Infrastructure\Entity\User\Cycle\UserEntity::class,
+        Schema::ENTITY => Bot\Infrastructure\Entity\User\Cycle\UserEntity::class,
         Schema::MAPPER => Cycle\ORM\Mapper\Mapper::class,
         Schema::SOURCE => Cycle\ORM\Select\Source::class,
         Schema::REPOSITORY => Cycle\ORM\Select\Repository::class,
