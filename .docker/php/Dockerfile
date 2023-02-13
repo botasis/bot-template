@@ -35,5 +35,5 @@ RUN addgroup -g 1000 appuser && \
 
 USER appuser
 
-COPY --chown=appuser:appuser project/ ./
+COPY --chown=appuser:appuser ./ ./
 RUN composer install -q

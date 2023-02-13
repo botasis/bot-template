@@ -13,7 +13,7 @@ nbproject
 Thumbs.db
 
 # composer vendor dir
-/project/vendor
+vendor
 
 # composer itself is not needed
 composer.phar
@@ -34,7 +34,7 @@ phpunit.phar
 # local environment
 .env
 docker-compose.override.yml
-/project/rr_cache_dir
+/rr_cache_dir
 
 # RoadRunner binary
-/project/rr
+/rr
