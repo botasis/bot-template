@@ -21,7 +21,7 @@ services:
     volumes:
       - ./.docker/php/php.ini:/usr/local/etc/php/conf.d/40-custom.ini:ro
       - ./.docker/data/composer:/home/appuser/.composer
-      - ./project:/var/www
+      - ./:/var/www
     environment:
       TZ: Europe/Moscow
       DB_PASSWORD: ${DB_PASSWORD:-bot-template-pass}

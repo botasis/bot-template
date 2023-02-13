@@ -97,9 +97,6 @@ return [
             'yiisoft/error-handler' => [
                 'config/web.php',
             ],
-            'yiisoft/middleware-dispatcher' => [
-                'config/web.php',
-            ],
             'yiisoft/yii-event' => [
                 'config/web.php',
             ],

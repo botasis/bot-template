@@ -1,0 +1,6 @@
+*
+!.gitignore
+!.dockerignore
+!schema.php
+!ssl/.gitkeep
+!logs-rr/.gitkeep
