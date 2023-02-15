@@ -90,8 +90,8 @@ services:
   promtail:
     image: grafana/promtail:2.4.1
     volumes:
-      - ./project/runtime/logs:/var/log/app
-      - ./project/runtime/logs-rr:/var/log/rr
+      - ./runtime/logs:/var/log/app
+      - ./runtime/logs-rr:/var/log/rr
       - .docker/data/promtail-data:/var/lib/promtail/positions
       - .docker/loki/promtail-local-config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
