@@ -36,7 +36,7 @@
         "vishnubob/wait-for-it": "dev-master",
         "yiisoft/aliases": "^2.0",
         "yiisoft/arrays": "^3.0",
-        "yiisoft/cache": "^2.0",
+        "yiisoft/cache": "^3.0",
         "yiisoft/cache-apcu": "dev-master",
         "yiisoft/config": "^1.1",
         "yiisoft/data": "^1.0",
