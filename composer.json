@@ -40,7 +40,7 @@
         "yiisoft/cache-apcu": "dev-master",
         "yiisoft/config": "^1.1",
         "yiisoft/data": "^1.0",
-        "yiisoft/data-response": "^1.0",
+        "yiisoft/data-response": "^2.0",
         "yiisoft/di": "^1.2",
         "yiisoft/error-handler": "^2.1",
         "yiisoft/http": "^1.2",
