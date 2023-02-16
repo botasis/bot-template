@@ -56,7 +56,7 @@
         "yiisoft/yii-queue-amqp": "3.0.x-dev",
         "yiisoft/yii-runner-console": "^1.1",
         "yiisoft/yii-runner-roadrunner": "^1.1",
-        "yiisoft/yii-sentry": "^1.0"
+        "yiisoft/yii-sentry": "^2.0"
     },
     "require-dev": {
         "infection/infection": "^0.26",
