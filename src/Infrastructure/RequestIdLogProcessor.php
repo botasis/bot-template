@@ -4,9 +4,9 @@ namespace Bot\Infrastructure;
 
 use Monolog\LogRecord;
 
-class RequestIdLogProcessor
+readonly class RequestIdLogProcessor
 {
-    public function __construct(private readonly RequestId $requestId)
+    public function __construct(private RequestId $requestId)
     {
     }
 

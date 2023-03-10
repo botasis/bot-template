@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bot\Infrastructure\Telegram\WebHook;
 
-use Viktorprogger\TelegramBot\Domain\Entity\Request\TelegramRequestFactory;
-use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Application;
+use Botasis\Runtime\Application;
+use Botasis\Runtime\Update\UpdateFactory;
 use Yiisoft\Yii\Queue\Message\MessageInterface;
 
 final class TelegramHookHandler
@@ -14,7 +14,7 @@ final class TelegramHookHandler
 
     public function __construct(
         private readonly Application $application,
-        private readonly TelegramRequestFactory $requestFactory,
+        private readonly UpdateFactory $updateFactory,
     ) {
     }
 
@@ -22,7 +22,7 @@ final class TelegramHookHandler
     {
         /** @var array $update */
         $update = $message->getData();
-        $telegramRequest = $this->requestFactory->create($update);
-        $this->application->handle($telegramRequest);
+        $Update = $this->updateFactory->create($update);
+        $this->application->handle($Update);
     }
 }
