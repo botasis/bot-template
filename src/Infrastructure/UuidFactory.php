@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bot\Infrastructure\Entity;
+namespace Bot\Infrastructure;
 
 use InvalidArgumentException;
 use Ramsey\Uuid\Exception\UnableToBuildUuidException;
