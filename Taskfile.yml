@@ -10,16 +10,16 @@ tasks:
       GROUP_ID:
         sh: id -g
     cmds:
-      - docker compose --profile full up -d --remove-orphans
+      - docker compose up -d --remove-orphans
 
-  up-main:
+  up-full:
     env:
       USER_ID:
         sh: id -u
       GROUP_ID:
         sh: id -g
     cmds:
-      - docker compose --profile main up -d --remove-orphans
+      - docker compose --profile full up -d --remove-orphans
 
   down:
     cmds:
@@ -69,7 +69,7 @@ tasks:
 
   php:run:
     cmds:
-      - docker compose run --rm php {{.CLI_ARGS}}
+      - docker compose run --rm {{if .parameters}}{{.parameters}}{{end}} php {{.CLI_ARGS}}
 
   yii:
     cmds:
@@ -93,30 +93,35 @@ tasks:
     cmds:
       - task: php:run
         vars:
+          parameters: --no-deps
           CLI_ARGS: composer install
 
   composer:u:
     cmds:
       - task: php:run
         vars:
+          parameters: --no-deps
           CLI_ARGS: composer update {{if .CLI_ARGS}}{{.CLI_ARGS}}{{end}}
 
   composer:r:
     cmds:
       - task: php:run
         vars:
+          parameters: --no-deps
           CLI_ARGS: composer require {{.CLI_ARGS}}
 
   composer:rm:
     cmds:
       - task: php:run
         vars:
+          parameters: --no-deps
           CLI_ARGS: composer remove {{.CLI_ARGS}}
 
   composer:yii-cfg:
     cmds:
       - task: php:run
         vars:
+          parameters: --no-deps
           CLI_ARGS: composer yii-config-rebuild
 
   prod:u:

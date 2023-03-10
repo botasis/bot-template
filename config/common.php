@@ -104,9 +104,9 @@ return [
     MessageSerializerInterface::class => MessageSerializer::class,
     AMQPConnectionConfig::class => [
         'setHost()' => ['amqp'],
-        'setPort()' => 5672,
-        'setUser()' => getenv('AMQP_USER'),
-        'setPassword()' => getenv('AMQP_PASSWORD'),
+        'setPort()' => [5672],
+        'setUser()' => [getenv('AMQP_USER')],
+        'setPassword()' => [getenv('AMQP_PASSWORD')],
         'setKeepalive()' => [true],
         'setIsLazy()' => [true],
     ],

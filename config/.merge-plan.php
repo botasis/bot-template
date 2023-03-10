@@ -5,59 +5,10 @@ declare(strict_types=1);
 // Do not edit. Content will be replaced.
 return [
     '/' => [
-        'common' => [
-            'botasis/runtime' => [
-                'config/common.php',
-            ],
-            'botasis/telegram-client' => [
-                'config/common.php',
-            ],
-            '/' => [
-                'common.php',
-            ],
-        ],
-        'params' => [
-            'botasis/runtime' => [
-                'config/params.php',
-            ],
-            'yiisoft/data-response' => [
-                'config/params.php',
-            ],
-            'yiisoft/router-fastroute' => [
-                'config/params.php',
-            ],
-            'yiisoft/yii-cycle' => [
-                'config/params.php',
-            ],
-            'yiisoft/yii-sentry' => [
-                'config/params.php',
-            ],
-            'botasis/telegram-client' => [
-                'config/params.php',
-            ],
-            'yiisoft/aliases' => [
-                'config/params.php',
-            ],
-            'yiisoft/validator' => [
-                'config/params.php',
-            ],
-            'yiisoft/yii-console' => [
-                'config/params.php',
-            ],
-            'yiisoft/yii-queue' => [
-                'config/params.php',
-            ],
-            'yiisoft/log-target-file' => [
-                'config/params.php',
-            ],
-            'yiisoft/translator' => [
-                'config/params.php',
-            ],
-            '/' => [
-                'params.php',
-            ],
-        ],
         'di' => [
+            'botasis/runtime' => [
+                'config/common.php',
+            ],
             'yiisoft/cache' => [
                 'config/di.php',
             ],
@@ -94,6 +45,47 @@ return [
             'yiisoft/yii-event' => [
                 'config/di.php',
             ],
+            '/' => [
+                'common.php',
+            ],
+        ],
+        'params' => [
+            'botasis/runtime' => [
+                'config/params.php',
+            ],
+            'yiisoft/data-response' => [
+                'config/params.php',
+            ],
+            'yiisoft/router-fastroute' => [
+                'config/params.php',
+            ],
+            'yiisoft/yii-cycle' => [
+                'config/params.php',
+            ],
+            'yiisoft/yii-sentry' => [
+                'config/params.php',
+            ],
+            'yiisoft/aliases' => [
+                'config/params.php',
+            ],
+            'yiisoft/validator' => [
+                'config/params.php',
+            ],
+            'yiisoft/yii-console' => [
+                'config/params.php',
+            ],
+            'yiisoft/yii-queue' => [
+                'config/params.php',
+            ],
+            'yiisoft/log-target-file' => [
+                'config/params.php',
+            ],
+            'yiisoft/translator' => [
+                'config/params.php',
+            ],
+            '/' => [
+                'params.php',
+            ],
         ],
         'di-web' => [
             'yiisoft/data-response' => [
@@ -108,6 +100,10 @@ return [
             'yiisoft/yii-event' => [
                 'config/di-web.php',
             ],
+            '/' => [
+                '$di',
+                'web.php',
+            ],
         ],
         'di-console' => [
             'yiisoft/yii-cycle' => [
@@ -118,6 +114,10 @@ return [
             ],
             'yiisoft/yii-event' => [
                 'config/di-console.php',
+            ],
+            '/' => [
+                '$di',
+                'console.php',
             ],
         ],
         'events-console' => [
@@ -147,18 +147,6 @@ return [
         'events-web' => [
             'yiisoft/log' => [
                 'config/events-web.php',
-            ],
-        ],
-        'web' => [
-            '/' => [
-                '$common',
-                'web.php',
-            ],
-        ],
-        'console' => [
-            '/' => [
-                '$common',
-                'console.php',
             ],
         ],
         'routes' => [

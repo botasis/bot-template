@@ -90,14 +90,14 @@
             "source-directory": "config"
         },
         "config-plugin": {
-            "common": "common.php",
+            "di": "common.php",
             "params": "params.php",
-            "web": [
-                "$common",
+            "di-web": [
+                "$di",
                 "web.php"
             ],
-            "console": [
-                "$common",
+            "di-console": [
+                "$di",
                 "console.php"
             ],
             "routes": "routes.php",
