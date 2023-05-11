@@ -62,7 +62,7 @@
     "require-dev": {
         "infection/infection": "^0.26",
         "maglnet/composer-require-checker": "^4.5",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^10.1",
         "psalm/attributes": "^0.1.0",
         "roave/infection-static-analysis-plugin": "^1.28",
         "roave/security-advisories": "dev-latest",
