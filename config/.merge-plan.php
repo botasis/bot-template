@@ -5,52 +5,55 @@ declare(strict_types=1);
 // Do not edit. Content will be replaced.
 return [
     '/' => [
-        'common' => [
-            'viktorprogger/telegram-bot' => [
+        'di' => [
+            'botasis/runtime' => [
                 'config/common.php',
             ],
             'yiisoft/cache' => [
-                'config/common.php',
+                'config/di.php',
             ],
             'yiisoft/router-fastroute' => [
-                'config/common.php',
+                'config/di.php',
             ],
             'yiisoft/yii-cycle' => [
-                'config/common.php',
+                'config/di.php',
             ],
             'yiisoft/yii-queue-amqp' => [
-                'config/common.php',
+                'config/di.php',
             ],
             'yiisoft/yii-sentry' => [
-                'config/common.php',
-            ],
-            'yiisoft/yii-queue' => [
-                'config/common.php',
+                'config/di.php',
             ],
             'yiisoft/aliases' => [
-                'config/common.php',
+                'config/di.php',
             ],
             'yiisoft/router' => [
-                'config/common.php',
+                'config/di.php',
             ],
             'yiisoft/validator' => [
-                'config/common.php',
+                'config/di.php',
+            ],
+            'yiisoft/yii-queue' => [
+                'config/di.php',
             ],
             'yiisoft/log-target-file' => [
-                'config/common.php',
+                'config/di.php',
             ],
             'yiisoft/translator' => [
-                'config/common.php',
+                'config/di.php',
             ],
             'yiisoft/yii-event' => [
-                'config/common.php',
+                'config/di.php',
             ],
             '/' => [
                 'common.php',
             ],
         ],
         'params' => [
-            'viktorprogger/telegram-bot' => [
+            'botasis/runtime' => [
+                'config/params.php',
+            ],
+            'yiisoft/data-response' => [
                 'config/params.php',
             ],
             'yiisoft/router-fastroute' => [
@@ -62,22 +65,19 @@ return [
             'yiisoft/yii-sentry' => [
                 'config/params.php',
             ],
-            'yiisoft/data-response' => [
-                'config/params.php',
-            ],
-            'yiisoft/yii-queue' => [
-                'config/params.php',
-            ],
             'yiisoft/aliases' => [
                 'config/params.php',
             ],
             'yiisoft/validator' => [
                 'config/params.php',
             ],
-            'yiisoft/log-target-file' => [
+            'yiisoft/yii-console' => [
                 'config/params.php',
             ],
-            'yiisoft/yii-console' => [
+            'yiisoft/yii-queue' => [
+                'config/params.php',
+            ],
+            'yiisoft/log-target-file' => [
                 'config/params.php',
             ],
             'yiisoft/translator' => [
@@ -87,36 +87,36 @@ return [
                 'params.php',
             ],
         ],
-        'web' => [
-            'yiisoft/router-fastroute' => [
-                'config/web.php',
-            ],
+        'di-web' => [
             'yiisoft/data-response' => [
-                'config/web.php',
+                'config/di-web.php',
+            ],
+            'yiisoft/router-fastroute' => [
+                'config/di-web.php',
             ],
             'yiisoft/error-handler' => [
-                'config/web.php',
+                'config/di-web.php',
             ],
             'yiisoft/yii-event' => [
-                'config/web.php',
+                'config/di-web.php',
             ],
             '/' => [
-                '$common',
+                '$di',
                 'web.php',
             ],
         ],
-        'console' => [
+        'di-console' => [
             'yiisoft/yii-cycle' => [
-                'config/console.php',
+                'config/di-console.php',
             ],
             'yiisoft/yii-console' => [
-                'config/console.php',
+                'config/di-console.php',
             ],
             'yiisoft/yii-event' => [
-                'config/console.php',
+                'config/di-console.php',
             ],
             '/' => [
-                '$common',
+                '$di',
                 'console.php',
             ],
         ],
@@ -130,17 +130,13 @@ return [
             'yiisoft/yii-console' => [
                 'config/events-console.php',
             ],
-            'yiisoft/yii-event' => [
-                '$events',
-                'config/events-console.php',
-            ],
             'yiisoft/log' => [
                 'config/events-console.php',
             ],
         ],
-        'delegates' => [
+        'di-delegates' => [
             'yiisoft/yii-cycle' => [
-                'config/delegates.php',
+                'config/di-delegates.php',
             ],
         ],
         'bootstrap' => [
@@ -148,24 +144,7 @@ return [
                 'config/bootstrap.php',
             ],
         ],
-        'providers-console' => [
-            'yiisoft/yii-console' => [
-                'config/providers-console.php',
-            ],
-        ],
-        'events' => [
-            'yiisoft/yii-event' => [
-                'config/events.php',
-            ],
-            '/' => [
-                'events.php',
-            ],
-        ],
         'events-web' => [
-            'yiisoft/yii-event' => [
-                '$events',
-                'config/events-web.php',
-            ],
             'yiisoft/log' => [
                 'config/events-web.php',
             ],
@@ -173,6 +152,11 @@ return [
         'routes' => [
             '/' => [
                 'routes.php',
+            ],
+        ],
+        'events' => [
+            '/' => [
+                'events.php',
             ],
         ],
         'delegates-console' => [

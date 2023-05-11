@@ -23,7 +23,7 @@ service:
     restart_sec: 1
 
   telegram_updates:
-      command: php yii viktorprogger/telegram/updates
+      command: php yii botasis/telegram/updates
       remain_after_exit: true
       restart_sec: 10
 

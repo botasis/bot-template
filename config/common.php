@@ -3,8 +3,15 @@
 
 declare(strict_types=1);
 
-use Bot\Infrastructure\Entity\Request\Cycle\RequestRepository;
-use Bot\Infrastructure\Entity\User\Cycle\UserRepository;
+use Bot\Infrastructure\RequestIdLogProcessor;
+use Bot\Infrastructure\Telegram\Middleware\NotFoundUpdateHandler;
+use Botasis\Client\Telegram\Client\ClientInterface;
+use Botasis\Client\Telegram\Client\ClientLog;
+use Botasis\Client\Telegram\Client\ClientPsr;
+use Botasis\Runtime\Application;
+use Botasis\Runtime\Middleware\Implementation\RouterMiddleware;
+use Botasis\Runtime\Middleware\MiddlewareDispatcher;
+use Botasis\Runtime\Router;
 use Http\Client\Socket\Client;
 use HttpSoft\Message\RequestFactory;
 use HttpSoft\Message\StreamFactory;
@@ -17,8 +24,9 @@ use Monolog\Processor\MemoryPeakUsageProcessor;
 use Monolog\Processor\MemoryUsageProcessor;
 use Monolog\Processor\PsrLogMessageProcessor;
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Connection\AMQPLazyConnection;
-use Psr\Http\Client\ClientInterface;
+use PhpAmqpLib\Connection\AMQPConnectionConfig;
+use PhpAmqpLib\Connection\AMQPConnectionFactory;
+use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -28,21 +36,6 @@ use Ramsey\Uuid\UuidFactoryInterface;
 use Sentry\ClientBuilder;
 use Sentry\SentrySdk;
 use Sentry\State\HubInterface;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Viktorprogger\TelegramBot\Domain\Client\TelegramClientInterface;
-use Viktorprogger\TelegramBot\Domain\Entity\Request\RequestRepositoryInterface;
-use Viktorprogger\TelegramBot\Domain\Entity\User\UserRepositoryInterface;
-use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Application;
-use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Middleware\MiddlewareDispatcher;
-use Viktorprogger\TelegramBot\Domain\UpdateRuntime\Router;
-use Viktorprogger\TelegramBot\Infrastructure\Client\TelegramClientLog;
-use Viktorprogger\TelegramBot\Infrastructure\Client\TelegramClientPsr;
-use Viktorprogger\TelegramBot\Infrastructure\Client\TelegramClientSymfony;
-use Viktorprogger\TelegramBot\Infrastructure\UpdateRuntime\Middleware\RequestPersistingMiddleware;
-use Viktorprogger\TelegramBot\Infrastructure\UpdateRuntime\Middleware\RouterMiddleware;
-use Bot\Infrastructure\RequestIdLogProcessor;
-use Bot\Infrastructure\Telegram\Middleware\NotFoundRequestHandler;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\Cache\Apcu\ApcuCache;
 use Yiisoft\Definitions\DynamicReference;
@@ -59,27 +52,25 @@ use Yiisoft\Yii\Queue\QueueInterface;
 /** @var array $params */
 
 return [
-    TelegramClientInterface::class => TelegramClientPsr::class,
-    TelegramClientPsr::class => [
+    ClientInterface::class => ClientPsr::class,
+    ClientPsr::class => [
         '__construct()' => [
             'token' => getenv('BOT_TOKEN'),
             'logger' => Reference::to('loggerTelegram'),
         ],
     ],
-    TelegramClientLog::class => ['__construct()' => ['logger' => Reference::to('loggerTelegram')]],
-    RequestRepositoryInterface::class => RequestRepository::class,
-    UserRepositoryInterface::class => UserRepository::class,
+    ClientLog::class => ['__construct()' => ['logger' => Reference::to('loggerTelegram')]],
 
-    ClientInterface::class => Client::class,
+    HttpClientInterface::class => Client::class,
     StreamFactoryInterface::class => StreamFactory::class,
     RequestFactoryInterface::class => RequestFactory::class,
 
     UuidFactoryInterface::class => UuidFactory::class,
 
     LoggerInterface::class => Logger::class,
-    Logger::class => static function(Aliases $alias, RequestIdLogProcessor $requestIdLogProcessor) {
+    Logger::class => static function (Aliases $alias, RequestIdLogProcessor $requestIdLogProcessor) {
         return (new Logger('application'))
-            ->pushProcessor(static function (LogRecord $record): LogRecord {
+            ->pushProcessor(static function (LogRecord $record) : LogRecord {
                 if ($record->extra !== []) {
                     $context = $record->context + ['extra' => $record->extra];
 
@@ -105,26 +96,25 @@ return [
 
     CacheInterface::class => ApcuCache::class,
     Router::class => [
-        '__construct()' => ['routes' => $params['telegram routes']]
+        '__construct()' => ['routes' => $params['telegram routes']],
     ],
 
     QueueInterface::class => Queue::class,
     AdapterInterface::class => Adapter::class,
     MessageSerializerInterface::class => MessageSerializer::class,
-    AbstractConnection::class => AMQPLazyConnection::class,
-    AMQPLazyConnection::class => [
-        '__construct()' => [
-            'host' => 'amqp',
-            'port' => 5672,
-            'user' => getenv('AMQP_USER'),
-            'password' => getenv('AMQP_PASSWORD'),
-            'keepalive' => true,
-        ],
+    AMQPConnectionConfig::class => [
+        'setHost()' => ['amqp'],
+        'setPort()' => [5672],
+        'setUser()' => [getenv('AMQP_USER')],
+        'setPassword()' => [getenv('AMQP_PASSWORD')],
+        'setKeepalive()' => [true],
+        'setIsLazy()' => [true],
     ],
+    AbstractConnection::class => static fn(AMQPConnectionConfig $config) => AMQPConnectionFactory::create($config),
     QueueSettings::class => [
         '__construct()' => ['queueName' => 'yii-queue'],
     ],
-    HubInterface::class => static function (): HubInterface {
+    HubInterface::class => static function () : HubInterface {
         $options = ['dsn' => getenv('SENTRY_DSN'), 'environment' => getenv('YII_ENV')];
         $client = ClientBuilder::create($options)->getClient();
         $hub = SentrySdk::init();
@@ -134,12 +124,11 @@ return [
     },
     Application::class => [
         '__construct()' => [
-            'fallbackHandler' => Reference::to(NotFoundRequestHandler::class),
-            'dispatcher' => DynamicReference::to(static function (Injector $injector): MiddlewareDispatcher {
+            'fallbackHandler' => Reference::to(NotFoundUpdateHandler::class),
+            'dispatcher' => DynamicReference::to(static function (Injector $injector) : MiddlewareDispatcher {
                 return ($injector->make(MiddlewareDispatcher::class))
                     ->withMiddlewares(
                         [
-                            RequestPersistingMiddleware::class,
                             RouterMiddleware::class,
                         ]
                     );

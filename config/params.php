@@ -16,6 +16,10 @@ return [
             'action' => HelloAction::class,
         ],
     ],
+    'botasis/telegram-bot' => [
+        'bot token' => getenv('BOT_TOKEN'),
+        'errors to ignore' => [],
+    ],
 
     'yiisoft/aliases' => [
         'aliases' => [

@@ -3,8 +3,6 @@
 namespace Bot\Infrastructure;
 
 use Ramsey\Uuid\UuidInterface;
-use RuntimeException;
-use Bot\Infrastructure\Entity\UuidFactory;
 
 final class RequestId
 {
