@@ -59,7 +59,7 @@
         "yiisoft/yii-sentry": "^2.0"
     },
     "require-dev": {
-        "infection/infection": "^0.26",
+        "infection/infection": "^0.27",
         "maglnet/composer-require-checker": "^4.5",
         "phpunit/phpunit": "^10.0",
         "psalm/attributes": "^0.1.0",
