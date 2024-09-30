@@ -1,4 +1,4 @@
-# This template is outdated.
+# !!This template is outdated!!
 I will update it to a cutting edge after the [runtime package](https://github.com/botasis/runtime) 1.0 release.
 
 # Telegram bot template
