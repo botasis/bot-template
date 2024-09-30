@@ -1,3 +1,6 @@
+# This template is outdated.
+I will update it to a cutting edge after the [runtime package](https://github.com/botasis/runtime) 1.0 release.
+
 # Telegram bot template
 
 It's a ready-to-use application template meant to boost creation of a new Telegram bot for you. 
